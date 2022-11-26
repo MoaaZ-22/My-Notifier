@@ -33,18 +33,19 @@ dependencies:
     sdk: flutter
   hive:
   hive_flutter:
+  flutter_localizations:
+    sdk: flutter
+  intl: 0.17.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  dio: ^4.0.6
   flutter_bloc: ^8.1.1
   bloc: ^8.1.0
   shared_preferences: ^2.0.15
   flutter_svg: ^1.1.6
   sizer: ^2.0.15
-  intl: ^0.17.0
   date_picker_timeline: ^1.2.3
   path_provider: ^2.0.11
   conditional_builder_null_safety: ^0.0.6
@@ -52,6 +53,13 @@ dependencies:
   flutter_zoom_drawer: ^3.0.3
   flutter_local_notifications: ^12.0.4
   flutter_native_timezone: ^2.0.0
+  flutter_native_splash: ^2.2.15
+
+flutter_native_splash:
+  background_image: "assets/images/splash-screen-light-mode.png"
+  background_image_dark: "assets/images/splash-screen-dark-mode.png"
+  android_gravity: fill
+  fullscreen: true
 
 
 dev_dependencies:
@@ -82,6 +90,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/lang/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

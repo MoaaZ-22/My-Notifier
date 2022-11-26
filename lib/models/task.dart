@@ -11,7 +11,7 @@ class Task
   @HiveField(2)
   final DateTime date;
   @HiveField(3)
-  final String startTime;
+  final DateTime startTime;
   @HiveField(4)
   final String endTime;
   @HiveField(5)

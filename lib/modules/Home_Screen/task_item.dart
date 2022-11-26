@@ -1,8 +1,10 @@
 // ignore_for_file: unnecessary_null_in_if_null_operators
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:my_task/shared/components/components.dart';
+import 'package:my_task/shared/network/local/notification_helper.dart';
+import 'package:my_task/shared/styles/colors.dart';
 import 'package:sizer/sizer.dart';
 import '../../models/task.dart';
 import '../../shared/cubit/cubit.dart';
@@ -10,18 +12,22 @@ import '../../shared/cubit/cubit.dart';
 
 class TaskItem extends StatelessWidget {
   final Task model;
+  final int taskId;
   final String? historyText;
   final double? width;
   final double? fontSize;
   final BoxBorder? border;
-  const TaskItem({Key? key, required this.model, this.historyText = '', required this.width,required this.fontSize, this.border}) : super(key: key);
+  const TaskItem({Key? key, required this.model, this.historyText = '', required this.width,required this.fontSize, this.border, required this.taskId}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+    var translatedTime = DateFormat('hh:mm a', AppCubit.get(context).lang).format(model.startTime);
     return InkWell(
       borderRadius: BorderRadius.circular(10),
       onTap: () {
         showModelSheet(context: context, task: model);
+        NotifyHelper().deleteNotification(taskId: taskId);
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 2.h),
@@ -53,10 +59,9 @@ class TaskItem extends StatelessWidget {
                         CircleAvatar(
                           radius: 5.h,
                           backgroundColor: Colors.blue.shade200,
-                          child: model.category == "Development" ? SvgPicture.asset(
-                              height: 6.h,
-                              width: 10.w,
-                              'assets/images/mobile_development.svg') : SvgPicture.asset('assets/images/server.svg'),
+                          child: Align(
+                              alignment: AlignmentDirectional.center,
+                              child: categoriesIcon(category: model.category)),
                         ),
                         SizedBox(width: 2.h,),
                         Column(
@@ -92,11 +97,11 @@ class TaskItem extends StatelessWidget {
                 alignment: AlignmentDirectional.center,
                 width: width,
                 height: 5.5.h,
-                decoration: const BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20))
+                decoration: BoxDecoration(
+                    color: AppCubit.get(context).darkMode == false ? Colors.black : secondDefaultColor,
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20))
                 ),
-                child: Text('$historyText${model.startTime}', style: TextStyle(fontSize: fontSize, fontFamily: 'AsapCondensed-Bold', color: Colors.white),),
+                child: Text('$historyText$translatedTime', style: TextStyle(fontSize: fontSize, fontFamily: 'AsapCondensed-Bold', color: Colors.white),),
               )
             ]
         ),

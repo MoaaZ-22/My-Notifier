@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, use_full_hex_values_for_flutter_colors
+// ignore_for_file: use_full_hex_values_for_flutter_colors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -18,6 +18,10 @@ class AppCubit extends Cubit<AppStates> {
 
   var todayDateBeforeFormat = DateTime.now();
 
+  var selectedDateForTime = DateTime.now();
+
+  var dateBarStartDay = DateTime.now();
+
   var startAndEndTimeValidation = DateTime.now();
 
   TextEditingController? taskNameController = TextEditingController();
@@ -26,11 +30,13 @@ class AppCubit extends Cubit<AppStates> {
   TextEditingController? startTimeController = TextEditingController();
   TextEditingController? endTimeController = TextEditingController();
 
-  List<String> newTaskCategories = ['Development', 'Research', 'Design', 'Backend', 'Person', 'Date',];
+  List<String> dropDownButton = ['ar', 'en',];
 
   int selectIndex = 0;
 
   bool darkMode = false;
+
+  String lang = 'en';
 
   void newTaskCatChangeIndex(int index) {
     selectIndex = index;
@@ -54,7 +60,6 @@ class AppCubit extends Cubit<AppStates> {
     keys = [];
     keys = box.keys.cast<int>().toList();
     taskList = [];
-
     for( var key in keys!)
       {
         taskList?.add(box.get(key)!);
@@ -70,7 +75,6 @@ class AppCubit extends Cubit<AppStates> {
       value.add(task);
           emit(AddTaskSuccessState());
     }).catchError((error){
-      print(error.toString());
       emit(AddTaskErrorState());
     }).then((value) =>getBox(),);
   }
@@ -90,7 +94,6 @@ class AppCubit extends Cubit<AppStates> {
       return value.put(desiredKey, task);
     }).catchError((error)
     {
-      print(error.toString());
       emit(UpdateTaskErrorState());
     }).then((value) => getBox(),);
   }
@@ -110,7 +113,6 @@ class AppCubit extends Cubit<AppStates> {
       return value.delete(desiredKey);
     }).catchError((error)
     {
-      print(error.toString());
       emit(DeleteTaskErrorState());
     }).then((value) => getBox(),);
   }
@@ -133,18 +135,45 @@ class AppCubit extends Cubit<AppStates> {
   showDatePicked(context)
   {
     return showDatePicker(
+      locale: lang == 'en'  ? const Locale('en') : const Locale('ar'),
         context: context,
-        initialDate: DateTime.now()
+        initialDate: todayDateBeforeFormat
         ,firstDate: DateTime.now(),
         lastDate: DateTime(2040, 12, 30)).then((value)
     {
-      emit(DatePickedSuccessState());
-      var selectedDate = DateFormat('EEEE,   dd  MMMM').format(value!);
-      dateController!.text = selectedDate;
-      todayDateBeforeFormat = value;
-      print('$todayDateBeforeFormat **************************** Show Date Picker');
+      if(value != null)
+        {
+          FocusManager.instance.primaryFocus?.unfocus();
+          emit(DatePickedSuccessState());
+          var selectedDate = DateFormat('EEEE,   dd  MMMM', lang).format(value);
+          dateController!.text = selectedDate;
+          todayDateBeforeFormat = value;
+        }
+      else{
+        value = todayDateBeforeFormat;
+      }
     });
 
+  }
+
+  showTimePicked(context) {
+    return showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    ).then((value) {
+      emit(TimePickedSuccessState());
+      FocusManager.instance.primaryFocus?.unfocus();
+      var day = AppCubit.get(context).todayDateBeforeFormat;
+      AppCubit.get(context).selectedDateForTime = DateTime(day.year, day.month, day.day, value!.hour, value.minute,);
+      AppCubit.get(context).startAndEndTimeValidation = DateTime(
+        day.year,
+        day.month,
+        day.day,
+        value.hour,
+        value.minute,
+      );
+    }).catchError((error) {
+    });
   }
 
   void buttonFunc({required GlobalKey<FormState> formKey, context})
@@ -155,12 +184,14 @@ class AppCubit extends Cubit<AppStates> {
           title: taskNameController!.text,
           category: category!,
           date : todayDateBeforeFormat,
-          startTime: startTimeController!.text,
+          startTime: selectedDateForTime,
           endTime: endTimeController!.text,
           description: descriptionController!.text));
-      Navigator.pop(context);
-      controllersClear();
-      todayDateBeforeFormat = DateTime.now();
+          Navigator.pop(context);
+          controllersClear();
+          selectIndex = 0 ;
+          todayDateBeforeFormat = DateTime.now();
+          selectedDateForTime = DateTime.now();
     } else if (taskNameController!.text.isEmpty ||
         descriptionController!.text.isEmpty) {
       snackBar(
@@ -171,7 +202,6 @@ class AppCubit extends Cubit<AppStates> {
           text: 'Required, All Fields Are Required!');
     }
   }
-
 
   void changeAppMode({bool? fromShared})
   {
@@ -237,4 +267,16 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
+  void changeLanguage(String languageCode)
+  {
+    if(languageCode.isNotEmpty)
+      {
+        lang = languageCode;
+      }else
+      {
+      lang = lang;
+    }
+    CacheHelper.saveData(key: 'Lang', value: lang).then((value){
+      emit(ChangeAppModeState());});
+  }
 }

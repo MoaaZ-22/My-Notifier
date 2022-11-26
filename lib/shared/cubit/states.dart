@@ -22,9 +22,14 @@ class DateBarToggleState extends AppStates {}
 
 class DatePickedSuccessState extends AppStates {}
 
+class TimePickedSuccessState extends AppStates {}
+
 class ZoomDrawerToggle extends AppStates {}
 
 class ChangeAppModeState extends AppStates {}
+
+class ChangeLocalState extends AppStates {}
+
 
 
 

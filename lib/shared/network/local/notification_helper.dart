@@ -1,9 +1,11 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:intl/intl.dart';
 import 'package:my_task/models/task.dart';
 import '../../../main.dart';
 import "package:timezone/data/latest.dart" as tz;
@@ -11,15 +13,15 @@ import 'package:timezone/timezone.dart' as tz;
 
 class NotifyHelper
 {
-  FlutterLocalNotificationsPlugin
-  flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
-    print('MoaaZ');
     _configurationLocalTimeZone();
     const AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
 
     final DarwinInitializationSettings initializationSettingsIOS =
     DarwinInitializationSettings(
@@ -40,6 +42,11 @@ class NotifyHelper
     );
   }
 
+  void deleteNotification({required int taskId}) async
+  {
+    await flutterLocalNotificationsPlugin.cancel(taskId);
+  }
+
   void requestIOSPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -51,43 +58,29 @@ class NotifyHelper
     );
   }
 
-  scheduledNotification({required int hour, required int minutes, required Task task}) async {
+  scheduledNotification({required int hour, required int minutes, required Task task, required int id,}) async {
+    var startTime = DateFormat('hh:mm a',).format(task.startTime);
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        'Get yourself ready to get the task done',
-        '${task.startTime}, ${task.title}',
-        _convertTime(hour, minutes-10),
+        id,
+        'Task Time!',
+        '$startTime, ${task.title}',
+        _convertTime(hour, minutes, task),
         const NotificationDetails(
             android: AndroidNotificationDetails('your channel id',
                 'your channel name', channelDescription:'your channel description')),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.time
-    );
-
-  }
-
-  scheduledNotification2({required int hour, required int minutes, required Task task}) async {
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        task.title,
-        task.description,
-        _convertTime(hour, minutes),
-        const NotificationDetails(
-            android: AndroidNotificationDetails('your channel id',
-                'your channel name', channelDescription:'your channel description')),
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.time
+        matchDateTimeComponents: DateTimeComponents.dateAndTime
     );
 
   }
 
 
   displayNotification({required String title, required String body}) async {
-    print("doing test");
+    if (kDebugMode) {
+      print("doing test");
+    }
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
         'your channel id', 'your channel name', channelDescription: 'your channel description',
         importance: Importance.max, priority: Priority.high);
@@ -119,11 +112,11 @@ class NotifyHelper
     );
   }
 
-  tz.TZDateTime _convertTime(int? hour, int? minutes)
+  tz.TZDateTime _convertTime(int? hour, int? minutes, Task task)
   {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime handleDateTime = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour!, minutes!);
-    if(handleDateTime.isBefore(now))
+    tz.TZDateTime handleDateTime = tz.TZDateTime(tz.local, task.date.year, task.date.month, task.date.day, hour!, minutes!);
+    if(handleDateTime.isBefore(now) && handleDateTime.isAfter(now))
       {
         handleDateTime = handleDateTime.add(const Duration(days: 1));
       }

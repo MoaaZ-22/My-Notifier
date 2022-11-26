@@ -1,0 +1,23 @@
+{
+  "myNotifier" : "My Notifier",
+  "today"   : "Today",
+  "createNewTask" : "Create New Task",
+  "taskName" : "Task Name",
+  "taskTitle" : "Write your task title",
+  "category" : "Select Category",
+  "development" : "Development",
+  "research" : "Research",
+  "design" : "Design",
+  "backend" : "Backend",
+  "meeting" : "Meeting",
+  "date" : "Date",
+  "startTime" : "Start Time",
+  "endTime" : "End Time",
+  "description" : "Description",
+  "writeDescription" : "Write here your description",
+  "createTask" : "Create Task",
+  "settings" : "Settings",
+  "darkMode" : "Dark Mode",
+  "language" : "Language",
+  "history" : "History"
+}

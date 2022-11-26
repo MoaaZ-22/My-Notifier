@@ -1,0 +1,24 @@
+{
+
+  "myNotifier" : "مهامي",
+  "today" : "اليوم",
+  "createNewTask" : "إنشاء مهمة جديدة",
+  "taskName" : "اسم المهمة",
+  "taskTitle" : "اكتب عنوان المهمة",
+  "category" : "حدد الفئة",
+  "development" : "تطوير",
+  "research" : "بحث",
+  "design" : "تصميم",
+  "backend" : "الخلفية",
+  "meeting" : "لقاء",
+  "date" : "التاريخ",
+  "startTime" : "وقت البدء",
+  "endTime" : "وقت الانتهاء",
+  "description" : "تفاصيل",
+  "writeDescription" : "اكتب هنا التفاصيل",
+  "createTask" : "إنشاء مهمة",
+  "settings" : "الإعدادات",
+  "darkMode" : "الوضع المظلم",
+  "language" : "اللغه",
+  "history" : "السجل"
+}

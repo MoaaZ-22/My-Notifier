@@ -1,5 +1,4 @@
 // ignore_for_file: depend_on_referenced_packages
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -33,7 +32,7 @@ class HistoryScreen extends StatelessWidget {
               itemBuilder: (context, index)
               {
                 var task = AppCubit.get(context).taskList![index];
-                var taskHistoryDate = DateFormat.yMMMEd().format(taskList[index].date);
+                var taskHistoryDate = DateFormat.yMMMEd(appCubit.lang).format(taskList[index].date);
                 final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
                 tz.TZDateTime taskDate = tz.TZDateTime(tz.local,task.date.year, task.date.month, task.date.day,);
                 if (taskDate.isBefore(tz.TZDateTime(tz.local, now.year, now.month, now.day,))) {
@@ -42,6 +41,7 @@ class HistoryScreen extends StatelessWidget {
                       child: SlideAnimation(
                         child: FadeInAnimation(
                           child: TaskItem(
+                            taskId: appCubit.keys![index],
                             model: taskList[index],
                             historyText: '$taskHistoryDate  -  ',
                             width: 60.w, fontSize: 13.sp, border: Border.all(color: Colors.blueGrey, width: 1),),

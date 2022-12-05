@@ -1,10 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
 ThemeData? darkTheme = ThemeData(
   textTheme: const TextTheme(
       bodyText1: TextStyle(fontSize: 30,fontFamily: 'AsapCondensed-Bold', color: Colors.white)
+  ),
+  appBarTheme: const AppBarTheme(
+    systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
   ),
   scrollbarTheme: ScrollbarThemeData(
     mainAxisMargin: 4.5.h,
@@ -20,6 +24,9 @@ ThemeData? darkTheme = ThemeData(
 );
 
 ThemeData? lightTheme = ThemeData(
+  appBarTheme: const AppBarTheme(
+    systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   textTheme: const TextTheme(
       bodyText1: TextStyle(fontSize: 30,fontFamily: 'AsapCondensed-Bold', color: Colors.black),

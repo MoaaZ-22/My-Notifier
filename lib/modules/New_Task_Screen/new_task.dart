@@ -30,30 +30,32 @@ class NewTaskScreen extends StatelessWidget {
           {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: Scaffold(
-            appBar: newTaskAppBar(context: context, leadingFunc: () {Navigator.pop(context);appCubit.controllersClear();appCubit.selectIndex = 0;}, actionsFunc: () {}),
-            backgroundColor: AppCubit.get(context).darkMode ==  false ? Colors.white : darkThemeColor1,
-            bottomNavigationBar: Padding(
-              padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 4.h),
-              child: ReusableTextButton(
-                height: 8.8.h,
-                fontSize: 28.sp,
-                color: Colors.blue,
-                textColor: Colors.white,
-                buttonText: 'createTask'.tr(context),
-                onPressed: ()
-                {
-                  appCubit.buttonFunc(formKey: formKey, context: context);
-                },
+          child: SafeArea(
+            child: Scaffold(
+              appBar: newTaskAppBar(context: context, leadingFunc: () {Navigator.pop(context);appCubit.controllersClear();appCubit.selectIndex = 0;}, actionsFunc: () {}),
+              backgroundColor: AppCubit.get(context).darkMode ==  false ? Colors.white : darkThemeColor1,
+              bottomNavigationBar: Padding(
+                padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 4.h),
+                child: ReusableTextButton(
+                  height: 8.8.h,
+                  fontSize: 28.sp,
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  buttonText: 'createTask'.tr(context),
+                  onPressed: ()
+                  {
+                    appCubit.buttonFunc(formKey: formKey, context: context);
+                  },
+                ),
               ),
-            ),
-            extendBody: false,
-            body: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 3.h, right: 2.w),
-              scrollDirection: Axis.vertical,
-              child: Form(
-                key: formKey,
-                child: newTaskBuildScreen(context: context),
+              extendBody: false,
+              body: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 3.h, right: 2.w),
+                scrollDirection: Axis.vertical,
+                child: Form(
+                  key: formKey,
+                  child: newTaskBuildScreen(context: context),
+                ),
               ),
             ),
           ),

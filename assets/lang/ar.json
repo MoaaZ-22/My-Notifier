@@ -9,7 +9,7 @@
   "development" : "تطوير",
   "research" : "بحث",
   "design" : "تصميم",
-  "backend" : "الخلفية",
+  "backend" : "باك اند",
   "meeting" : "لقاء",
   "date" : "التاريخ",
   "startTime" : "وقت البدء",
@@ -20,5 +20,7 @@
   "settings" : "الإعدادات",
   "darkMode" : "الوضع المظلم",
   "language" : "اللغه",
-  "history" : "السجل"
+  "history" : "السجل",
+  "delete" : "حذف",
+  "cancel" : "الغاء"
 }

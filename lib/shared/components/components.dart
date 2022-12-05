@@ -25,8 +25,7 @@ void navigateTo(context, dynamic widget) => Navigator.push(
       MaterialPageRoute(builder: (context) => widget),
     );
 
-Widget circularProIndicator(
-        {required double? height, required double? width}) =>
+Widget circularProIndicator({required double? height, required double? width}) =>
     Center(
       child: SizedBox(
         height: height,
@@ -38,13 +37,7 @@ Widget circularProIndicator(
       ),
     );
 
-ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBar({
-  context,
-  required Color? backgroundColor,
-  required SnackBarBehavior? barBehavior,
-  required int? seconds,
-  required String? text,
-}) {
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBar({context, required Color? backgroundColor, required SnackBarBehavior? barBehavior, required int? seconds, required String? text,}) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: backgroundColor,
       elevation: 5,
@@ -137,8 +130,8 @@ Widget dateBar(DateTime now, context) {
     padding: EdgeInsets.all(appCubit.lang == 'en' ? 3.0 : 0),
     locale: appCubit.lang,
     appCubit.dateBarStartDay,
-    height: 80,
-    width: 70,
+    height: 11.2.h,
+    width: 19.w,
     border: Border.all(
         color: AppCubit.get(context).darkMode == false
             ? Colors.blue
@@ -150,7 +143,7 @@ Widget dateBar(DateTime now, context) {
     deactivatedColor: Colors.red,
     selectedTextColor: Colors.white,
     dateTextStyle: TextStyle(
-        fontSize: 20,
+        fontSize: 16.8.sp,
         fontFamily: 'AsapCondensed-Bold',
         color: AppCubit.get(context).darkMode == false
             ? Colors.black
@@ -170,8 +163,7 @@ Widget dateBar(DateTime now, context) {
   );
 }
 
-PreferredSizeWidget? newTaskAppBar(
-    {void Function()? leadingFunc, void Function()? actionsFunc, context}) {
+PreferredSizeWidget? newTaskAppBar({void Function()? leadingFunc, void Function()? actionsFunc, context}) {
   var appCubit = AppCubit.get(context);
   return AppBar(
     titleSpacing: 0,
@@ -215,7 +207,7 @@ PreferredSizeWidget? historyAppBar(
         : darkThemeColor1,
     automaticallyImplyLeading: false,
     title: Text(
-      'History',
+      'history'.tr(context),
       style: TextStyle(
           color: AppCubit.get(context).darkMode == false
               ? Colors.black
@@ -549,7 +541,7 @@ showModelSheet({context, required Task task}) {
       builder: (context) {
         return Container(
           width: double.infinity,
-          height: 23.h,
+          height: 30.h,
           padding: const EdgeInsets.all(4),
           color: AppCubit.get(context).darkMode == false
               ? Colors.white
@@ -570,7 +562,7 @@ showModelSheet({context, required Task task}) {
                 height: 6.8.h,
                 color: Colors.red,
                 textColor: Colors.white,
-                buttonText: 'Delete',
+                buttonText: 'delete'.tr(context),
                 onPressed: () {
                   AppCubit.get(context).deleteTask(task);
                   Navigator.pop(context);
@@ -591,7 +583,7 @@ showModelSheet({context, required Task task}) {
                 textColor: AppCubit.get(context).darkMode == false
                     ? Colors.black
                     : Colors.white,
-                buttonText: 'Cancel',
+                buttonText: 'cancel'.tr(context),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -609,7 +601,7 @@ showModelSheet({context, required Task task}) {
 }
 
 Widget categoriesIcon({String? category}) {
-  if (category == 'Development') {
+  if (category == 'Development' || category == 'تطوير') {
     return Padding(
       padding: EdgeInsets.only(right: 2.5.w),
       child: Icon(
@@ -618,25 +610,25 @@ Widget categoriesIcon({String? category}) {
         size: defaultSize,
       ),
     );
-  } else if (category == 'Research') {
+  } else if (category == 'Research' || category == 'بحث') {
     return Icon(
       Icons.search,
       color: defaultCategoryColor,
       size: defaultSize,
     );
-  } else if (category == 'Design') {
+  } else if (category == 'Design' || category == 'تصميم') {
     return Icon(
       IconlyBroken.palette_solid,
       color: defaultCategoryColor,
       size: defaultSize,
     );
-  } else if (category == 'Backend') {
+  } else if (category == 'Backend' || category == 'باك اند') {
     return Icon(
       IconlyBroken.server_solid,
       color: defaultCategoryColor,
       size: defaultSize,
     );
-  } else if (category == 'Meeting') {
+  } else if (category == 'Meeting' || category == 'لقاء') {
     return Icon(
       IconlyBroken.date,
       color: defaultCategoryColor,
@@ -809,8 +801,8 @@ Widget homeBottomWidget(context) {
       decoration: BoxDecoration(
           color: appCubit.darkMode == false ? Colors.blue : darkThemeColor2,
           borderRadius: appCubit.lang == 'en'
-              ? const BorderRadius.only(topRight: Radius.circular(40))
-              : const BorderRadius.only(topLeft: Radius.circular(40))),
+              ? const BorderRadius.only(topRight: Radius.circular(35))
+              : const BorderRadius.only(topLeft: Radius.circular(35))),
       child: ConditionalBuilder(
         condition: taskList!.isNotEmpty,
         builder: (context) => Scrollbar(
@@ -874,8 +866,8 @@ Widget homeTopWidget(context) {
             ? Colors.white
             : darkThemeColor1,
         borderRadius: appCubit.lang == 'en'
-            ? const BorderRadius.only(bottomLeft: Radius.circular(40))
-            : const BorderRadius.only(bottomRight: Radius.circular(40))),
+            ? const BorderRadius.only(bottomLeft: Radius.circular(35))
+            : const BorderRadius.only(bottomRight: Radius.circular(35))),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -946,12 +938,9 @@ Widget homeTopWidget(context) {
             ],
           ),
         ),
-    appCubit.lang == 'en'
-        ? SizedBox(
-      height: 2.h,
-    )
-        : SizedBox(height: 1.h,),
-        dateBar(DateTime.now(), context)
+        SizedBox(height: 1.5.h,),
+        dateBar(DateTime.now(), context),
+
       ],
     ),
   );

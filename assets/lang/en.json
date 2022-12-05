@@ -19,5 +19,7 @@
   "settings" : "Settings",
   "darkMode" : "Dark Mode",
   "language" : "Language",
-  "history" : "History"
+  "history" : "History",
+  "delete" : "Delete",
+  "cancel" : "Cancel"
 }

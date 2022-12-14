@@ -13,12 +13,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]);
-    SystemChrome.setEnabledSystemUIMode (SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     return BlocConsumer<AppCubit, AppStates>(
     listener: (context, state) {
     },
     builder: (context, state) {
+      SystemChrome.setEnabledSystemUIMode (SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     var appCubit = AppCubit.get(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,

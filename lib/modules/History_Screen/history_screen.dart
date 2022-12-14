@@ -1,8 +1,11 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
+import 'package:my_task/shared/cubit/states.dart';
 import 'package:my_task/shared/styles/colors.dart';
 import 'package:sizer/sizer.dart';
 import '../../shared/components/components.dart';
@@ -17,6 +20,11 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var appCubit = AppCubit.get(context);
     var taskList =  AppCubit.get(context).taskList;
+    return BlocConsumer<AppCubit, AppStates>(
+  listener: (context, state) {},
+  builder: (context, state) {
+    SystemChrome.setEnabledSystemUIMode (SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     return Scaffold(
       backgroundColor: appCubit.darkMode == false ? Colors.white : darkThemeColor1,
       appBar: historyAppBar(context:context, leadingFunc: (){Navigator.pop(context);}),
@@ -60,5 +68,7 @@ class HistoryScreen extends StatelessWidget {
         fallback: (context) => emptyWidget(),
       ),
     );
+  },
+);
   }
 }

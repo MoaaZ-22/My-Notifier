@@ -25,7 +25,8 @@ void navigateTo(context, dynamic widget) => Navigator.push(
       MaterialPageRoute(builder: (context) => widget),
     );
 
-Widget circularProIndicator({required double? height, required double? width}) =>
+Widget circularProIndicator(
+        {required double? height, required double? width}) =>
     Center(
       child: SizedBox(
         height: height,
@@ -37,7 +38,13 @@ Widget circularProIndicator({required double? height, required double? width}) =
       ),
     );
 
-ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBar({context, required Color? backgroundColor, required SnackBarBehavior? barBehavior, required int? seconds, required String? text,}) {
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBar({
+  context,
+  required Color? backgroundColor,
+  required SnackBarBehavior? barBehavior,
+  required int? seconds,
+  required String? text,
+}) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: backgroundColor,
       elevation: 5,
@@ -163,7 +170,8 @@ Widget dateBar(DateTime now, context) {
   );
 }
 
-PreferredSizeWidget? newTaskAppBar({void Function()? leadingFunc, void Function()? actionsFunc, context}) {
+PreferredSizeWidget? newTaskAppBar(
+    {void Function()? leadingFunc, void Function()? actionsFunc, context}) {
   var appCubit = AppCubit.get(context);
   return AppBar(
     titleSpacing: 0,
@@ -420,7 +428,13 @@ showTimePicked(context) {
   ).then((value) {
     print(value);
     var day = AppCubit.get(context).todayDateBeforeFormat;
-    AppCubit.get(context).selectedDateForTime = DateTime(day.year, day.month, day.day, value!.hour, value.minute,);
+    AppCubit.get(context).selectedDateForTime = DateTime(
+      day.year,
+      day.month,
+      day.day,
+      value!.hour,
+      value.minute,
+    );
     AppCubit.get(context).startAndEndTimeValidation = DateTime(
       day.year,
       day.month,
@@ -684,9 +698,11 @@ Widget newTaskBuildScreen({context}) {
           validator: (value) => appCubit.createNewTaskValidation(value)),
       appCubit.lang == 'en'
           ? SizedBox(
-        height: 4.h,
-      )
-          : SizedBox(height: 2.h,),
+              height: 4.h,
+            )
+          : SizedBox(
+              height: 2.h,
+            ),
       Padding(
         padding: EdgeInsets.only(left: 7.w, right: 3.3.w),
         child: Text(
@@ -833,7 +849,9 @@ Widget homeBottomWidget(context) {
                       child: SlideAnimation(
                         child: FadeInAnimation(
                           child: TaskItem(
-                            border: appCubit.darkMode == true ? Border.all(color: Colors.blueGrey, width: 1) : null,
+                            border: appCubit.darkMode == true
+                                ? Border.all(color: Colors.blueGrey, width: 1)
+                                : null,
                             taskId: appCubit.keys![index],
                             model: taskList[index],
                             width: 30.w,
@@ -889,7 +907,7 @@ Widget homeTopWidget(context) {
             children: [
               Text(
                 'myNotifier'.tr(context),
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: appCubit.lang == 'ar' ? 28: 30),
               ),
               const Spacer(),
               MaterialButton(
@@ -938,9 +956,13 @@ Widget homeTopWidget(context) {
             ],
           ),
         ),
-        SizedBox(height: 1.5.h,),
+        appCubit.lang == 'ar' ? SizedBox(
+          height: 1.h,
+        ) :
+        SizedBox(
+          height: 1.5.h,
+        ),
         dateBar(DateTime.now(), context),
-
       ],
     ),
   );

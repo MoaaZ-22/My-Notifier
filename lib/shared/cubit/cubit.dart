@@ -11,7 +11,6 @@ import '../components/const.dart';
 import '../network/local/cache_helper.dart';
 
 class AppCubit extends Cubit<AppStates> {
-
   AppCubit() : super(InitialAppState());
 
   static AppCubit get(context) => BlocProvider.of(context);
@@ -30,7 +29,10 @@ class AppCubit extends Cubit<AppStates> {
   TextEditingController? startTimeController = TextEditingController();
   TextEditingController? endTimeController = TextEditingController();
 
-  List<String> dropDownButton = ['ar', 'en',];
+  List<String> dropDownButton = [
+    'ar',
+    'en',
+  ];
 
   int selectIndex = 0;
 
@@ -53,36 +55,31 @@ class AppCubit extends Cubit<AppStates> {
   List<Task>? taskList = [];
   List<int>? keys = [];
 
-  getBox()async
-  {
-
+  getBox() async {
     var box = await Hive.openBox<Task>('task');
     keys = [];
     keys = box.keys.cast<int>().toList();
     taskList = [];
-    for( var key in keys!)
-      {
-        taskList?.add(box.get(key)!);
-      }
+    for (var key in keys!) {
+      taskList?.add(box.get(key)!);
+    }
     box.close();
     emit(GetBoxState());
   }
 
-  addTask(Task task) async
-  {
-    await Hive.openBox<Task>('task')
-        .then((value) {
+  addTask(Task task) async {
+    await Hive.openBox<Task>('task').then((value) {
       value.add(task);
-          emit(AddTaskSuccessState());
-    }).catchError((error){
+      emit(AddTaskSuccessState());
+    }).catchError((error) {
       emit(AddTaskErrorState());
-    }).then((value) =>getBox(),);
+    }).then(
+      (value) => getBox(),
+    );
   }
 
-  updateTask(Task task) async
-  {
-    await Hive.openBox<Task>('task').then((value)
-    {
+  updateTask(Task task) async {
+    await Hive.openBox<Task>('task').then((value) {
       final Map<dynamic, Task> taskMap = value.toMap();
       dynamic desiredKey;
       taskMap.forEach((key, value) {
@@ -92,16 +89,15 @@ class AppCubit extends Cubit<AppStates> {
         }
       });
       return value.put(desiredKey, task);
-    }).catchError((error)
-    {
+    }).catchError((error) {
       emit(UpdateTaskErrorState());
-    }).then((value) => getBox(),);
+    }).then(
+      (value) => getBox(),
+    );
   }
 
-  deleteTask(Task task) async
-  {
-    await Hive.openBox<Task>('task').then((value)
-    {
+  deleteTask(Task task) async {
+    await Hive.openBox<Task>('task').then((value) {
       final Map<dynamic, Task> taskMap = value.toMap();
       dynamic desiredKey;
       taskMap.forEach((key, value) {
@@ -111,14 +107,14 @@ class AppCubit extends Cubit<AppStates> {
         }
       });
       return value.delete(desiredKey);
-    }).catchError((error)
-    {
+    }).catchError((error) {
       emit(DeleteTaskErrorState());
-    }).then((value) => getBox(),);
+    }).then(
+      (value) => getBox(),
+    );
   }
 
-  controllersClear()
-  {
+  controllersClear() {
     taskNameController!.clear();
     dateController!.clear();
     descriptionController!.clear();
@@ -126,34 +122,29 @@ class AppCubit extends Cubit<AppStates> {
     endTimeController!.clear();
   }
 
-  dateBarToggle(DateTime onDate)
-  {
+  dateBarToggle(DateTime onDate) {
     todayDateBeforeFormat = onDate;
     emit(DateBarToggleState());
   }
 
-  showDatePicked(context)
-  {
+  showDatePicked(context) {
     return showDatePicker(
-      locale: lang == 'en'  ? const Locale('en') : const Locale('ar'),
-        context: context,
-        initialDate: todayDateBeforeFormat
-        ,firstDate: DateTime.now(),
-        lastDate: DateTime(2040, 12, 30)).then((value)
-    {
-      if(value != null)
-        {
-          FocusManager.instance.primaryFocus?.unfocus();
-          emit(DatePickedSuccessState());
-          var selectedDate = DateFormat('EEEE,   dd  MMMM', lang).format(value);
-          dateController!.text = selectedDate;
-          todayDateBeforeFormat = value;
-        }
-      else{
+            locale: lang == 'en' ? const Locale('en') : const Locale('ar'),
+            context: context,
+            initialDate: todayDateBeforeFormat,
+            firstDate: DateTime.now(),
+            lastDate: DateTime(2040, 12, 30))
+        .then((value) {
+      if (value != null) {
+        FocusManager.instance.primaryFocus?.unfocus();
+        emit(DatePickedSuccessState());
+        var selectedDate = DateFormat('EEEE,   dd  MMMM', lang).format(value);
+        dateController!.text = selectedDate;
+        todayDateBeforeFormat = value;
+      } else {
         value = todayDateBeforeFormat;
       }
     });
-
   }
 
   showTimePicked(context) {
@@ -164,7 +155,13 @@ class AppCubit extends Cubit<AppStates> {
       emit(TimePickedSuccessState());
       FocusManager.instance.primaryFocus?.unfocus();
       var day = AppCubit.get(context).todayDateBeforeFormat;
-      AppCubit.get(context).selectedDateForTime = DateTime(day.year, day.month, day.day, value!.hour, value.minute,);
+      AppCubit.get(context).selectedDateForTime = DateTime(
+        day.year,
+        day.month,
+        day.day,
+        value!.hour,
+        value.minute,
+      );
       AppCubit.get(context).startAndEndTimeValidation = DateTime(
         day.year,
         day.month,
@@ -172,26 +169,22 @@ class AppCubit extends Cubit<AppStates> {
         value.hour,
         value.minute,
       );
-    }).catchError((error) {
-    });
+    }).catchError((error) {});
   }
 
-  void buttonFunc({required GlobalKey<FormState> formKey, context})
-  {
+  void buttonFunc({required GlobalKey<FormState> formKey, context}) {
     if (formKey.currentState!.validate()) {
-      addTask(
-          Task(
+      addTask(Task(
           title: taskNameController!.text,
           category: category!,
-          date : todayDateBeforeFormat,
+          date: todayDateBeforeFormat,
           startTime: selectedDateForTime,
           endTime: endTimeController!.text,
           description: descriptionController!.text));
-          Navigator.pop(context);
-          controllersClear();
-          selectIndex = 0 ;
-          todayDateBeforeFormat = DateTime.now();
-          selectedDateForTime = DateTime.now();
+      Navigator.pop(context);
+      controllersClear();
+      selectIndex = 0;
+      selectedDateForTime = DateTime.now();
     } else if (taskNameController!.text.isEmpty ||
         descriptionController!.text.isEmpty) {
       snackBar(
@@ -203,80 +196,60 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  void changeAppMode({bool? fromShared})
-  {
+  void changeAppMode({bool? fromShared}) {
     if (fromShared != null) {
       darkMode = fromShared;
       emit(ChangeAppModeState());
     } else {
       darkMode = !darkMode;
     }
-    CacheHelper.setDataIntoShPre(key: 'isDark', value: darkMode).then((value){
-      emit(ChangeAppModeState());});
+    CacheHelper.setDataIntoShPre(key: 'isDark', value: darkMode).then((value) {
+      emit(ChangeAppModeState());
+    });
   }
 
-  changeColor({int? index})
-  {
-    if(selectIndex == index)
-    {
-      if (darkMode == false)
-      {
+  changeColor({int? index}) {
+    if (selectIndex == index) {
+      if (darkMode == false) {
         return defaultColor;
-      }
-      else if (darkMode == true)
-      {
+      } else if (darkMode == true) {
         return darkThemeColor2!;
       }
     }
-    if (selectIndex != index)
-        {
-          if(darkMode ==  false)
-          {
-            return Colors.white;
-          }
-          else if(darkMode ==  true)
-          {
-            return darkThemeColor1;
-          }
-        }
+    if (selectIndex != index) {
+      if (darkMode == false) {
+        return Colors.white;
+      } else if (darkMode == true) {
+        return darkThemeColor1;
+      }
+    }
   }
 
-  changeBorderColor({int? index})
-  {
-    if(selectIndex == index)
-    {
-      if (darkMode == false)
-      {
+  changeBorderColor({int? index}) {
+    if (selectIndex == index) {
+      if (darkMode == false) {
         return null;
-      }
-      else if (darkMode == true)
-      {
+      } else if (darkMode == true) {
         return null;
       }
     }
-    if (selectIndex != index)
-    {
-      if(darkMode ==  false)
-      {
-        return Border.all(color:  secondDefaultColor ,width: 1);
-      }
-      else if(darkMode ==  true)
-      {
+    if (selectIndex != index) {
+      if (darkMode == false) {
+        return Border.all(color: secondDefaultColor, width: 1);
+      } else if (darkMode == true) {
         return Border.all(color: Colors.grey, width: 1);
       }
     }
   }
 
-  void changeLanguage(String languageCode)
-  {
-    if(languageCode.isNotEmpty)
-      {
-        lang = languageCode;
-      }else
-      {
+  void changeLanguage(String languageCode) {
+    if (languageCode.isNotEmpty) {
+      lang = languageCode;
+    } else {
       lang = lang;
     }
-    CacheHelper.saveData(key: 'Lang', value: lang).then((value){
-      emit(ChangeAppModeState());});
+    CacheHelper.saveData(key: 'Lang', value: lang).then((value) {
+      emit(ChangeAppModeState());
+    });
   }
 }

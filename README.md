@@ -1,4 +1,4 @@
-# My Task
+# My Notifier
 
  ToDo App With Hive, Local Notifications, Localization [ar , en] and Dark Mode
  
